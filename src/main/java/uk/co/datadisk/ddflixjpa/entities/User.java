@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +23,11 @@ public class User extends AbstractDomainClass {
         this.email = email;
     }
 
+    @NotNull
     @Column(name = "email", unique=true)
     private String email;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ShippingAddress> userShippingAddresses;
+
 }
