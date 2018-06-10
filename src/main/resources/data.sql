@@ -1,0 +1,1 @@
+insert into users(id, email, date_created, last_updated) values(1, 'paul.valle@example.com', curdate(), curdate())

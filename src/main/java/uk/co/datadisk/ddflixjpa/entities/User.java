@@ -11,10 +11,15 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
 @Table(name = "users")
 public class User extends AbstractDomainClass {
+
+    @Builder
+    public User(Long id, String email) {
+        super(id);
+        this.email = email;
+    }
 
     @Column(name = "email", unique=true)
     private String email;
