@@ -42,6 +42,8 @@ public class UserRepositoryTest {
         userRepository.save(user2);
 
         List<User> users = userRepository.findAll();
-        logger.info("User list:" + users.toString());
+        for(User user : users){
+            System.out.println("User: " + user.getEmail() + " (" + user.getId() + ")");
+        }
     }
 }
