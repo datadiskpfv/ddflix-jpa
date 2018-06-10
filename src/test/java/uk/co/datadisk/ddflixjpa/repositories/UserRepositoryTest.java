@@ -46,4 +46,20 @@ public class UserRepositoryTest {
             System.out.println("User: " + user.getEmail() + " (" + user.getId() + ")");
         }
     }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void lastUpdatedTest() {
+        User user = userRepository.findById(1L).get();
+        user.setEmail("paul.valle@example.com - updated");
+
+        try {
+            Thread.sleep(5000);
+        }
+        catch (Exception ex){
+            System.out.println("ERROR trying to sleep");
+        }
+        userRepository.save(user);
+    }
 }
