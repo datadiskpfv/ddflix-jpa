@@ -20,7 +20,7 @@ public class City extends AbstractDomainClass {
   @Column(name = "city")
   private String city;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "county_id")
   private County county;
 

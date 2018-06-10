@@ -30,7 +30,7 @@ public class ShippingAddress extends AbstractDomainClass {
   @Column(name = "shipping_address_street2")
   private String shippingAddressStreet2;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.PERSIST)
   @JoinColumn(name = "shipping_address_city_id")
   private City shippingAddressCity;
 
