@@ -27,7 +27,7 @@ public class User extends AbstractDomainClass {
     @Column(name = "email", unique=true)
     private String email;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user")
     private List<ShippingAddress> userShippingAddresses;
 
 }
