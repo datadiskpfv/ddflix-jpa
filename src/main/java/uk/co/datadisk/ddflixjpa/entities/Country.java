@@ -19,7 +19,7 @@ public class Country extends AbstractDomainClass {
   @Column(name = "country", unique = true)
   private String country;
 
-  @OneToMany(mappedBy="country", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy="country")
   private Set<County> counties = new HashSet<>();
 
   @Override

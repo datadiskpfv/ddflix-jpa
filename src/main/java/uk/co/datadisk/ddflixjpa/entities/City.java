@@ -20,11 +20,16 @@ public class City extends AbstractDomainClass {
   @Column(name = "city")
   private String city;
 
-  @ManyToOne(cascade = CascadeType.PERSIST)
+  @ManyToOne
   @JoinColumn(name = "county_id")
   private County county;
 
   @OneToMany(mappedBy = "shippingAddressCity")
   private Set<ShippingAddress> shippingAddresses = new HashSet<>();
+
+  @Override
+  public String toString(){
+    return city;
+  }
 
 }

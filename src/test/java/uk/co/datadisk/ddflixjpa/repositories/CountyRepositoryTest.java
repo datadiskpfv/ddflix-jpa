@@ -86,7 +86,7 @@ public class CountyRepositoryTest {
         county.setCountry(country);
         countyRepository.save(county);
 
-        // flush changes to the database and refresh the country entity to pick the changes
+        // flush changes to the database and refresh the country/county entities to pickup the new changes
         // the commit does not happen until after the test, hence why we do below
         em.flush();
         em.refresh(country);
