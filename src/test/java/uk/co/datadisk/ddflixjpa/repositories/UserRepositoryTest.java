@@ -19,7 +19,6 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = DdflixJpaApplication.class)
-@ActiveProfiles("test")
 @TestPropertySource("classpath:application-test.properties")
 public class UserRepositoryTest {
 
@@ -36,7 +35,6 @@ public class UserRepositoryTest {
 
     @Test
     @Transactional
-    @Rollback(false)
     public void createUser() {
         User user2 = User.builder().email("lorraine.valle@example.com").build();
         userRepository.save(user2);
@@ -49,9 +47,8 @@ public class UserRepositoryTest {
 
     @Test
     @Transactional
-    @Rollback(false)
     public void lastUpdatedTest() {
-        User user = userRepository.findById(1L).get();
+        User user = userRepository.findByEmail("paul.valle@example.com");
         user.setEmail("paul.valle@example.com - updated");
 
         try {

@@ -1,8 +1,7 @@
 package uk.co.datadisk.ddflixjpa.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,6 +11,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"cities"})
 @Entity
 @Table(name = "county")
 public class County extends AbstractDomainClass {
@@ -26,5 +26,10 @@ public class County extends AbstractDomainClass {
 
   @OneToMany(mappedBy="county")
   private Set<City> cities = new HashSet<>();
+
+  @Override
+  public String toString(){
+    return county;
+  }
 
 }
