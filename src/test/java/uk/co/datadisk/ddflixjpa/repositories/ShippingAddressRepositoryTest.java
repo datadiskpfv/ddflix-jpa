@@ -52,6 +52,7 @@ public class ShippingAddressRepositoryTest {
     @Transactional
     public void readCounty(){
         // the create happens in the setUp method - see @Before
-        assertEquals("The Willows", shippingAddressRepository.findById(1L).get().getShippingAddressName());
+        assertEquals("The Willows", shippingAddressRepository.findByShippingAddressName("The Willows").getShippingAddressName());
+        assertEquals("The Willows", shippingAddressRepository.findByShippingAddressNumberAndShippingAddressStreet1("1", "River Lane").getShippingAddressName());
     }
 }
