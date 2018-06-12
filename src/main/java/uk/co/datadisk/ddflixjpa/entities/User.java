@@ -1,6 +1,5 @@
 package uk.co.datadisk.ddflixjpa.entities;
 
-
 import lombok.*;
 import uk.co.datadisk.ddflixjpa.entities.film.Film;
 import uk.co.datadisk.ddflixjpa.entities.film.Wishlist;
