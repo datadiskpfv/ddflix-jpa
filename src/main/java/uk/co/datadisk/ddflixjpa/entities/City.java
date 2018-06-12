@@ -2,6 +2,7 @@ package uk.co.datadisk.ddflixjpa.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"addresses"})
 @Entity
 @Table(name = "city")
 public class City extends AbstractDomainClass {
@@ -20,12 +22,12 @@ public class City extends AbstractDomainClass {
   @Column(name = "city")
   private String city;
 
-  @ManyToOne
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinColumn(name = "county_id")
   private County county;
 
-  @OneToMany(mappedBy = "shippingAddressCity")
-  private Set<ShippingAddress> shippingAddresses = new HashSet<>();
+  @OneToMany(mappedBy = "city")
+  private Set<Address> addresses = new HashSet<>();
 
   @Override
   public String toString(){

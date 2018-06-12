@@ -8,7 +8,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -27,7 +30,15 @@ public class User extends AbstractDomainClass {
     @Column(name = "email", unique=true)
     private String email;
 
-    @OneToMany(mappedBy = "user")
-    private List<ShippingAddress> userShippingAddresses;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name="user_shipping_address",
+            joinColumns={@JoinColumn(name="user_id")},
+            inverseJoinColumns = {@JoinColumn(name="address_id")}
+    )
+    private Set<Address> shippingAddresses = new HashSet<>();
+
+    public void addShippingAddress(Address shippingAddress) { this.shippingAddresses.add(shippingAddress);}
+    public void removeShippingAddress(Address shippingAddress) { this.shippingAddresses.remove(shippingAddress);}
 
 }
