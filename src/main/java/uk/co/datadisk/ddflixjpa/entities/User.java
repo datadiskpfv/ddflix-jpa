@@ -35,11 +35,7 @@ public class User extends AbstractDomainClass {
     )
     private Set<Address> shippingAddresses = new HashSet<>();
 
-    @OneToMany(
-            mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Wishlist> wishlists = new ArrayList<>();
 
     public void addShippingAddress(Address shippingAddress) { this.shippingAddresses.add(shippingAddress);}

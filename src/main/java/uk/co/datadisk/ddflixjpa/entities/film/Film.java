@@ -23,10 +23,6 @@ public class Film extends AbstractDomainClass {
     @NotNull
     private String title;
 
-    @OneToMany(
-            mappedBy = "film",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Wishlist> users = new ArrayList<>();
+//    @OneToMany(mappedBy = "film")//, cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Wishlist> users = new ArrayList<>();
 }

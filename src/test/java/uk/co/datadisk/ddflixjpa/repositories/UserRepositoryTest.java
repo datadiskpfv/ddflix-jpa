@@ -181,6 +181,9 @@ public class UserRepositoryTest {
         user1.getWishlists().remove(new Wishlist(user1,film1));
         user2.removeFilmFromWishlist(film2);
 
+        // the below does indeed delete the entries in the wishlist table for only user2
+        //userRepository.delete(user2);
+
         System.out.println("DEB INFO");
     }
 }
