@@ -22,7 +22,7 @@ public abstract class AbstractDomainClass {
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date_created")
+    @Column(name = "date_created", updatable = false)
     private Date dateCreated;
 
     @UpdateTimestamp

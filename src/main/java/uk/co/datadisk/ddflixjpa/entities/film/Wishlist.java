@@ -28,7 +28,7 @@ public class Wishlist {
     @MapsId("filmId")
     private Film film;
 
-    @Column(name = "wished_on")
+    @Column(name = "wished_on", updatable = false)
     private Date wishedOn = new Date();
 
     public Wishlist(User user, Film film) {
