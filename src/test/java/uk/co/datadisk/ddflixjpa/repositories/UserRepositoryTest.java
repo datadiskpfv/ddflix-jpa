@@ -13,6 +13,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 import uk.co.datadisk.ddflixjpa.DdflixJpaApplication;
 import uk.co.datadisk.ddflixjpa.entities.*;
+import uk.co.datadisk.ddflixjpa.entities.film.Film;
+import uk.co.datadisk.ddflixjpa.repositories.film.FilmRepository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -43,6 +45,9 @@ public class UserRepositoryTest {
 
     @Autowired
     AddressRepository addressRepository;
+
+    @Autowired
+    FilmRepository filmRepository;
 
     @Before
     public void setUp() {
@@ -100,25 +105,22 @@ public class UserRepositoryTest {
 
     @Test
     @Transactional
-    @Rollback(false)
-    public void addCityToAddress() {
+    //@Rollback(false)
+    public void addAndDeleteShippingAddress() {
 
         // Create Country
         Country country = new Country();
         country.setCountry("England");
-        //countryRepository.save(country);      // Managed by cascade
 
         // Create County and set the country
         County county = new County();
         county.setCounty("Buckinghamshire");
         county.setCountry(country);
-        //countyRepository.save(county);        // Managed by cascade
 
         // Create City and set county
         City city = new City();
         city.setCity("Milton Keynes");
         city.setCounty(county);
-        //cityRepository.save(city);            // Managed by cascade
 
         // Create address and set City
         Address address = new Address();
@@ -128,21 +130,54 @@ public class UserRepositoryTest {
         address.setStreet2("Lake Estate");
         address.setPostcode("RL11 2RL");
         address.setCity(city);
-        //addressRepository.save(address);      // Managed by cascade
 
         // Find the user and add a shipping address
         User user = userRepository.findByEmail("paul.valle@example.com");
         user.addShippingAddress(address);
         userRepository.save(user);
 
-        // flush changes to the database and refresh the county/city entities to pickup the new changes
-        // the commit does not happen until after the test, hence why we do below
-        em.flush();
-        em.refresh(user);
-
         // Address check
-        //assertEquals("paul.valle@example.com", address.getUser().getEmail());
+        assertEquals(1, user.getShippingAddresses().size());
+        assertEquals("The Willows", user.getShippingAddresses().iterator().next().getName());
+
+        user.removeShippingAddress(address);
+        userRepository.save(user);
+
+        assertEquals(0, user.getShippingAddresses().size());
 
         logger.info("DEBUG");
+    }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void addFilmToWishlist(){
+
+        User user2 = User.builder().email("lorraine.valle@example.com").build();
+        userRepository.save(user2);
+
+        Film film1 = new Film();
+        film1.setTitle("Alien");
+        filmRepository.save(film1);
+
+        Film film2 = new Film();
+        film2.setTitle("Safe");
+        filmRepository.save(film2);
+
+        User user1 = userRepository.findByEmail("paul.valle@example.com");
+
+        user1.addFilmToWishList(film1);
+        user1.addFilmToWishList(film2);
+        user2.addFilmToWishList(film2);
+        user2.addFilmToWishList(film1);
+
+        em.flush();
+        em.refresh(user1);
+        em.refresh(user2);
+
+        user1.removeFilmFromWishlist(film1);
+        user2.removeFilmFromWishlist(film2);
+
+        System.out.println("DEB INFO");
     }
 }
