@@ -14,11 +14,11 @@ import java.util.Date;
 @Setter
 @EqualsAndHashCode(exclude = {"id", "wishedOn"})
 @Entity
-@Table(name = "user_film")
-public class UserFilm {
+@Table(name = "wishlist")
+public class Wishlist {
 
     @EmbeddedId
-    private UserFilmId id;
+    private WishlistId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
@@ -31,9 +31,9 @@ public class UserFilm {
     @Column(name = "wished_on")
     private Date wishedOn = new Date();
 
-    public UserFilm(User user, Film film) {
+    public Wishlist(User user, Film film) {
         this.user = user;
         this.film = film;
-        this.id = new UserFilmId(user.getId(), film.getId());
+        this.id = new WishlistId(user.getId(), film.getId());
     }
 }

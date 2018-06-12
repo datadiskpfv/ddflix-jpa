@@ -14,7 +14,7 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @Getter
 @Embeddable
-public class UserFilmId implements Serializable {
+public class WishlistId implements Serializable {
 
     @Column(name = "user_id")
     private Long userId;

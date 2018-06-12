@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.co.datadisk.ddflixjpa.DdflixJpaApplication;
 import uk.co.datadisk.ddflixjpa.entities.*;
 import uk.co.datadisk.ddflixjpa.entities.film.Film;
+import uk.co.datadisk.ddflixjpa.entities.film.Wishlist;
 import uk.co.datadisk.ddflixjpa.repositories.film.FilmRepository;
 
 import javax.persistence.EntityManager;
@@ -164,18 +165,20 @@ public class UserRepositoryTest {
         film2.setTitle("Safe");
         filmRepository.save(film2);
 
+        Film film3 = new Film();
+        film3.setTitle("Outpost");
+        filmRepository.save(film2);
+
         User user1 = userRepository.findByEmail("paul.valle@example.com");
 
-        user1.addFilmToWishList(film1);
-        user1.addFilmToWishList(film2);
+        // there are multiple ways to do the same thing
+        user1.getWishlists().add(new Wishlist(user1, film1));
+        user1.getWishlists().add(new Wishlist(user1, film2));
+        user1.getWishlists().add(new Wishlist(user1, film3));
         user2.addFilmToWishList(film2);
         user2.addFilmToWishList(film1);
 
-        em.flush();
-        em.refresh(user1);
-        em.refresh(user2);
-
-        user1.removeFilmFromWishlist(film1);
+        user1.getWishlists().remove(new Wishlist(user1,film1));
         user2.removeFilmFromWishlist(film2);
 
         System.out.println("DEB INFO");

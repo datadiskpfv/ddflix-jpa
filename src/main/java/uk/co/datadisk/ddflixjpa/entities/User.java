@@ -3,7 +3,7 @@ package uk.co.datadisk.ddflixjpa.entities;
 
 import lombok.*;
 import uk.co.datadisk.ddflixjpa.entities.film.Film;
-import uk.co.datadisk.ddflixjpa.entities.film.UserFilm;
+import uk.co.datadisk.ddflixjpa.entities.film.Wishlist;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -40,28 +40,15 @@ public class User extends AbstractDomainClass {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<UserFilm> wishlist = new ArrayList<>();
+    private List<Wishlist> wishlists = new ArrayList<>();
 
     public void addShippingAddress(Address shippingAddress) { this.shippingAddresses.add(shippingAddress);}
     public void removeShippingAddress(Address shippingAddress) { this.shippingAddresses.remove(shippingAddress);}
 
     public void addFilmToWishList(Film film) {
-        UserFilm userFilm = new UserFilm(this, film);
-        wishlist.add(userFilm);
-        //film.getUsers().add(userFilm);
+        wishlists.add(new Wishlist(this, film));
     }
-
     public void removeFilmFromWishlist(Film film) {
-        for (Iterator<UserFilm> iterator = wishlist.iterator(); iterator.hasNext(); ) {
-            UserFilm userFilm = iterator.next();
-
-            if (userFilm.getUser().equals(this) && userFilm.getFilm().equals(film)) {
-                iterator.remove();
-                userFilm.getFilm().getUsers().remove(userFilm);
-                userFilm.setUser(null);
-                userFilm.setFilm(null);
-            }
-        }
+        wishlists.remove(new Wishlist(this, film));
     }
-
 }

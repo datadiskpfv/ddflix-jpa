@@ -28,5 +28,5 @@ public class Film extends AbstractDomainClass {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private List<UserFilm> users = new ArrayList<>();
+    private List<Wishlist> users = new ArrayList<>();
 }
