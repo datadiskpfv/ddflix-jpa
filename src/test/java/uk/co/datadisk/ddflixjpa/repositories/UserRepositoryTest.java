@@ -184,6 +184,11 @@ public class UserRepositoryTest {
         // the below does indeed delete the entries in the wishlist table for only user2
         //userRepository.delete(user2);
 
+        System.out.println("User " + user1.getEmail() + " wishlist size: " + user1.getWishlists().size());
+        System.out.println("User " + user2.getEmail() + " wishlist size: " + user2.getWishlists().size());
+        assertTrue(user1.getWishlists().size() == 2);
+        assertTrue(user2.getWishlists().size() == 1);
+
         System.out.println("DEB INFO");
     }
 }
