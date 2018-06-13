@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"wishlist"})
+@EqualsAndHashCode(exclude = {"wishlist", "shippingAddresses"})
 @Entity
 @Table(name = "users")
 public class User extends AbstractDomainClass {
@@ -41,7 +41,6 @@ public class User extends AbstractDomainClass {
             joinColumns={@JoinColumn(name="user_id")},
             inverseJoinColumns = {@JoinColumn(name="address_id")}
     )
-    @OrderBy("shipppingAdresses.city.county.country,  shipppingAdresses.city.county, shipppingAdresses.city")
     private Set<Address> shippingAddresses = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -308,8 +308,8 @@ public class UserRepositoryTest {
     @Transactional
     @Rollback(false)
     public void orderShippingAddresses(){
-        User user1 = userRepository.findByEmail("paul.valle@example.com");
-        Set<Address> addresses = user1.getShippingAddresses();
+        User user1 = userRepository.findByEmail("will.hay@example.com");
+        System.out.println("Number of Shipping Address: " + user1.getShippingAddresses().size());
     }
 
     @Test
