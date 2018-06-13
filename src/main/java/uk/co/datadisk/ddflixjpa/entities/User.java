@@ -1,8 +1,6 @@
 package uk.co.datadisk.ddflixjpa.entities;
 
 import lombok.*;
-import org.hibernate.annotations.Sort;
-import org.hibernate.annotations.SortType;
 import uk.co.datadisk.ddflixjpa.entities.film.Film;
 import uk.co.datadisk.ddflixjpa.entities.film.Wishlist;
 
@@ -29,7 +27,15 @@ public class User extends AbstractDomainClass {
     @Column(name = "email", unique=true)
     private String email;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "default_shipping_address")
+    private Address default_shipping_address;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "default_billing_address")
+    private Address default_billing_address;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name="user_shipping_address",
             joinColumns={@JoinColumn(name="user_id")},
@@ -64,10 +70,12 @@ public class User extends AbstractDomainClass {
         return wishlists.contains(new Wishlist(this, film));
     }
 
+    // check the @OrderBy above
     public List<Wishlist> getSortedWishlistDesc(){
         return wishlists.stream().sorted(Comparator.comparing(Wishlist::getWishedOn).reversed()).collect(Collectors.toList());
     }
 
+    // check the @OrderBy above
     public List<Wishlist> getSortedWishlistAsc(){
         return wishlists.stream().sorted(Comparator.comparing(Wishlist::getWishedOn)).collect(Collectors.toList());
     }

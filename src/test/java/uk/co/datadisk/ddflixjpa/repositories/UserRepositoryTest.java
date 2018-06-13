@@ -1,6 +1,5 @@
 package uk.co.datadisk.ddflixjpa.repositories;
 
-import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -20,9 +20,8 @@ import uk.co.datadisk.ddflixjpa.repositories.film.FilmRepository;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -218,7 +217,8 @@ public class UserRepositoryTest {
 
     @Test
     @Transactional
-    @Rollback(false)
+    @DirtiesContext     // clean up the films from the persistent context
+    //@Rollback(false)
     public void sortWishlistOrder() {
         User user1 = userRepository.findByEmail("paul.valle@example.com");
 
@@ -253,5 +253,68 @@ public class UserRepositoryTest {
 
         user1.getSortedWishlistDesc().forEach(e -> System.out.println("Email:"+ e.getUser().getEmail() +", Film: "+e.getFilm().getTitle() +", Wished On:"+e.getWishedOn()));
         user1.getSortedWishlistAsc().forEach(e -> System.out.println("Email:"+ e.getUser().getEmail() +", Film: "+e.getFilm().getTitle() +", Wished On:"+e.getWishedOn()));
+    }
+
+    @Test
+    @Transactional
+    //@Rollback(false)
+    public void setDefaultShippingAddress() {
+
+        // Create Country
+        Country country = new Country();
+        country.setCountry("England");
+
+        // Create County and set the country
+        County county = new County();
+        county.setCounty("Buckinghamshire");
+        county.setCountry(country);
+
+        // Create City and set county
+        City city = new City();
+        city.setCity("Milton Keynes");
+        city.setCounty(county);
+
+        // Create address and set City
+        Address address = new Address();
+        address.setNumber("1");
+        address.setName("The Willows");
+        address.setStreet1("River Lane");
+        address.setStreet2("Lake Estate");
+        address.setPostcode("RL11 2RL");
+        address.setCity(city);
+
+        // Find the user and add a shipping address
+        User user = userRepository.findByEmail("paul.valle@example.com");
+        user.addShippingAddress(address);
+        user.setDefault_shipping_address(address);
+        user.setDefault_billing_address(address);
+        userRepository.save(user);
+
+        assertEquals("The Willows", user.getDefault_shipping_address().getName());
+        assertEquals("The Willows", user.getDefault_billing_address().getName());
+
+        System.out.println("DEBUG INFO");
+    }
+
+    @Test
+    @Transactional
+    //@Rollback(false)
+    public void deleteSpecifiedUsers() {
+
+        User user1 = User.builder().email("will.hay@example.com").build();
+        userRepository.save(user1);
+        User user2 = User.builder().email("graham.moffatt@example.com").build();
+        userRepository.save(user2);
+        User user3 = User.builder().email("moore.marriott@example.com").build();
+        userRepository.save(user3);
+
+        assertEquals(4, userRepository.findAll().size());
+
+        Collection<Long> userIds = new ArrayList<>();
+        userIds.add(2L);
+        userIds.add(3L);
+
+        userRepository.deleteUsersByIdIn(userIds);
+        assertEquals(2, userRepository.findAll().size());
     }
 }
