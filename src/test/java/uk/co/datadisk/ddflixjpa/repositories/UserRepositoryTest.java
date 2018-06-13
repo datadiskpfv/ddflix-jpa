@@ -306,14 +306,6 @@ public class UserRepositoryTest {
 
     @Test
     @Transactional
-    @Rollback(false)
-    public void orderShippingAddresses(){
-        User user1 = userRepository.findByEmail("will.hay@example.com");
-        System.out.println("Number of Shipping Address: " + user1.getShippingAddresses().size());
-    }
-
-    @Test
-    @Transactional
     //@Rollback(false)
     public void deleteSpecifiedUsers() {
 
