@@ -171,7 +171,7 @@ public class UserRepositoryTest {
 
         Film film3 = new Film();
         film3.setTitle("Outpost");
-        filmRepository.save(film2);
+        filmRepository.save(film3);
 
         User user1 = userRepository.findByEmail("paul.valle@example.com");
 
@@ -230,6 +230,10 @@ public class UserRepositoryTest {
         film2.setTitle("Safe");
         filmRepository.save(film2);
 
+        Film film3 = new Film();
+        film3.setTitle("Outpost");
+        filmRepository.save(film3);
+
         user1.addFilmToWishList(film1);
 
         try {
@@ -239,6 +243,14 @@ public class UserRepositoryTest {
         }
 
         user1.addFilmToWishList(film2);
+
+        try {
+            Thread.sleep(2000);
+        } catch(Exception ex) {
+            System.out.println(ex);
+        }
+        user1.addFilmToWishList(film3);
+
         user1.getSortedWishlistDesc().forEach(e -> System.out.println("Email:"+ e.getUser().getEmail() +", Film: "+e.getFilm().getTitle() +", Wished On:"+e.getWishedOn()));
         user1.getSortedWishlistAsc().forEach(e -> System.out.println("Email:"+ e.getUser().getEmail() +", Film: "+e.getFilm().getTitle() +", Wished On:"+e.getWishedOn()));
     }
