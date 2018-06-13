@@ -22,6 +22,7 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.Assert.*;
 
@@ -105,6 +106,13 @@ public class UserRepositoryTest {
             System.out.println("ERROR trying to sleep");
         }
         userRepository.save(user);
+    }
+
+    @Test
+    @Transactional
+    public void checkUniqueEmail(){
+        assertNotNull(userRepository.findByEmail("paul.valle@example.com"));
+        assertNull(userRepository.findByEmail("will.hay@example.com"));
     }
 
     @Test
@@ -294,6 +302,14 @@ public class UserRepositoryTest {
         assertEquals("The Willows", user.getDefault_billing_address().getName());
 
         System.out.println("DEBUG INFO");
+    }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void orderShippingAddresses(){
+        User user1 = userRepository.findByEmail("paul.valle@example.com");
+        Set<Address> addresses = user1.getShippingAddresses();
     }
 
     @Test

@@ -1,1 +1,1 @@
-insert into users(id, email, date_created, last_updated) values(1, 'paul.valle@example.com', curdate(), curdate())
+insert into country(id, country, date_created, last_updated) values (1, 'England', sysdate(), sysydate());
