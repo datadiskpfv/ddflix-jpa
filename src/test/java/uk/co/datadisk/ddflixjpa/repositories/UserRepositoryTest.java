@@ -1,5 +1,6 @@
 package uk.co.datadisk.ddflixjpa.repositories;
 
+import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +19,10 @@ import uk.co.datadisk.ddflixjpa.entities.film.Wishlist;
 import uk.co.datadisk.ddflixjpa.repositories.film.FilmRepository;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -151,7 +155,7 @@ public class UserRepositoryTest {
 
     @Test
     @Transactional
-    @Rollback(false)
+    //@Rollback(false)
     public void addFilmToWishlist(){
 
         User user2 = User.builder().email("lorraine.valle@example.com").build();
@@ -190,5 +194,52 @@ public class UserRepositoryTest {
         assertTrue(user2.getWishlists().size() == 1);
 
         System.out.println("DEB INFO");
+    }
+
+    @Test
+    @Transactional
+    //@Rollback(false)
+    public void checkFilmsInWishlist(){
+
+        User user1 = userRepository.findByEmail("paul.valle@example.com");
+
+        Film film1 = new Film();
+        film1.setTitle("Alien");
+        filmRepository.save(film1);
+
+        Film film2 = new Film();
+        film2.setTitle("Safe");
+        filmRepository.save(film2);
+
+        user1.addFilmToWishList(film1);
+        user1.addFilmToWishList(film1);             // won't be added as we already have film1 in wishlist
+        user1.removeFilmFromWishlist(film2);        // won't remove as we don't have film2 in wishlist
+    }
+
+    @Test
+    @Transactional
+    @Rollback(false)
+    public void sortWishlistOrder() {
+        User user1 = userRepository.findByEmail("paul.valle@example.com");
+
+        Film film1 = new Film();
+        film1.setTitle("Alien");
+        filmRepository.save(film1);
+
+        Film film2 = new Film();
+        film2.setTitle("Safe");
+        filmRepository.save(film2);
+
+        user1.addFilmToWishList(film1);
+
+        try {
+            Thread.sleep(2000);
+        } catch(Exception ex) {
+            System.out.println(ex);
+        }
+
+        user1.addFilmToWishList(film2);
+        user1.getSortedWishlistDesc().forEach(e -> System.out.println("Email:"+ e.getUser().getEmail() +", Film: "+e.getFilm().getTitle() +", Wished On:"+e.getWishedOn()));
+        user1.getSortedWishlistAsc().forEach(e -> System.out.println("Email:"+ e.getUser().getEmail() +", Film: "+e.getFilm().getTitle() +", Wished On:"+e.getWishedOn()));
     }
 }

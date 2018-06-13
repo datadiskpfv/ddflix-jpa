@@ -1,12 +1,15 @@
 package uk.co.datadisk.ddflixjpa.entities;
 
 import lombok.*;
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 import uk.co.datadisk.ddflixjpa.entities.film.Film;
 import uk.co.datadisk.ddflixjpa.entities.film.Wishlist;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -35,15 +38,37 @@ public class User extends AbstractDomainClass {
     private Set<Address> shippingAddresses = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("wishedOn DESC")
     private List<Wishlist> wishlists = new ArrayList<>();
 
     public void addShippingAddress(Address shippingAddress) { this.shippingAddresses.add(shippingAddress);}
     public void removeShippingAddress(Address shippingAddress) { this.shippingAddresses.remove(shippingAddress);}
 
     public void addFilmToWishList(Film film) {
-        wishlists.add(new Wishlist(this, film));
+        if(!checkFilmInWishlist(film)) {
+          wishlists.add(new Wishlist(this, film));
+        } else {
+            System.out.println("You already have " + film.getTitle() + " in your wishlist");
+        }
     }
+
     public void removeFilmFromWishlist(Film film) {
-        wishlists.remove(new Wishlist(this, film));
+        if(checkFilmInWishlist(film)){
+          wishlists.remove(new Wishlist(this, film));
+        } else {
+            System.out.println("You don't have " + film.getTitle() + " in your wishlist");
+        }
+    }
+
+    public boolean checkFilmInWishlist(Film film) {
+        return wishlists.contains(new Wishlist(this, film));
+    }
+
+    public List<Wishlist> getSortedWishlistDesc(){
+        return wishlists.stream().sorted(Comparator.comparing(Wishlist::getWishedOn).reversed()).collect(Collectors.toList());
+    }
+
+    public List<Wishlist> getSortedWishlistAsc(){
+        return wishlists.stream().sorted(Comparator.comparing(Wishlist::getWishedOn)).collect(Collectors.toList());
     }
 }
