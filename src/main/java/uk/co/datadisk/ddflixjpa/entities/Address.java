@@ -1,9 +1,6 @@
 package uk.co.datadisk.ddflixjpa.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -14,6 +11,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(exclude = {"city", "users"})
+@ToString(exclude = {"city", "users"})
 @Entity
 @Table(name = "address")
 public class Address extends AbstractDomainClass {

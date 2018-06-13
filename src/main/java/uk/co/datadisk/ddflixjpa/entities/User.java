@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"wishlist", "shippingAddresses"})
+@EqualsAndHashCode(exclude = {"wishlists", "shippingAddresses"})
 @Entity
 @Table(name = "users")
 public class User extends AbstractDomainClass {
@@ -44,7 +44,7 @@ public class User extends AbstractDomainClass {
     private Set<Address> shippingAddresses = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @OrderBy("wishedOn DESC")
+    @OrderBy("wishedOn ASC")
     private List<Wishlist> wishlists = new ArrayList<>();
 
     public void addShippingAddress(Address shippingAddress) { this.shippingAddresses.add(shippingAddress);}

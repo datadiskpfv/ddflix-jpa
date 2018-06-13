@@ -109,9 +109,10 @@ public class UserRepositoryTest {
 
     @Test
     @Transactional
+    @Rollback(false)
     public void checkUniqueEmail(){
         assertNotNull(userRepository.findByEmail("paul.valle@example.com"));
-        assertNull(userRepository.findByEmail("will.hay@example.com"));
+        assertNull(userRepository.findByEmail("will.hay1@example.com"));
     }
 
     @Test
@@ -260,6 +261,16 @@ public class UserRepositoryTest {
 
         user1.getSortedWishlistDesc().forEach(e -> System.out.println("Email:"+ e.getUser().getEmail() +", Film: "+e.getFilm().getTitle() +", Wished On:"+e.getWishedOn()));
         user1.getSortedWishlistAsc().forEach(e -> System.out.println("Email:"+ e.getUser().getEmail() +", Film: "+e.getFilm().getTitle() +", Wished On:"+e.getWishedOn()));
+    }
+
+    // This time we test the @OrderBy on the wishlist in the User entity
+    @Test
+    @Transactional
+    public void sortedWishlist(){
+        User user1 = userRepository.findByEmail("will.hay@example.com");
+        for(Wishlist wl : user1.getWishlists()){
+            System.out.println("Film: " + wl.getFilm().getTitle() + " Wished On: " + wl.getWishedOn());
+        }
     }
 
     @Test

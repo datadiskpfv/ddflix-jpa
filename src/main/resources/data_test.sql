@@ -30,3 +30,11 @@ insert into user_shipping_address(user_id, address_id) values (2, 2);
 insert into user_shipping_address(user_id, address_id) values (2, 3);
 insert into user_shipping_address(user_id, address_id) values (3, 3);
 insert into user_shipping_address(user_id, address_id) values (3, 1);
+
+insert into film(id, title, date_created, last_updated) values (1, 'Alien', sysdate(), sysdate());
+insert into film(id, title, date_created, last_updated) values (2, 'Safe', sysdate(), sysdate());
+insert into film(id, title, date_created, last_updated) values (3, 'Ask A Policeman', sysdate(), sysdate());
+
+insert into wishlist(user_id, film_id, wished_on) values (1, 1, sysdate());
+insert into wishlist(user_id, film_id, wished_on) values (1, 2, SUBDATE(NOW(), 1));
+insert into wishlist(user_id, film_id, wished_on) values (1, 3, SUBDATE(NOW(), 2));
